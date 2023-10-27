@@ -1,0 +1,582 @@
+C51 COMPILER V9.60.7.0   FB                                                                10/20/2023 10:47:11 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE FB
+OBJECT MODULE PLACED IN .\Objects\fb.obj
+COMPILER INVOKED BY: C:\keil5\C51\BIN\C51.EXE fb.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\fb.lst) 
+                    -OBJECT(.\Objects\fb.obj)
+
+line level    source
+
+   1          //#include <REGX52.H>
+   2          //#include "DELAY.H"
+   3          //#include "KEY.H"
+   4          //#include "MATRIXKEY.H"
+   5          //#include "TIMER0.H"
+   6          //#include "Nixie.H"
+   7          
+   8          //typedef unsigned int u16;
+   9          //typedef unsigned char u8;
+  10          
+  11          //u16 i;                //for循环变量
+  12          //long int Num1=0,Num2=0,Num3=0;                //存储数据
+  13          //u16 Negative1=0,Negative2=0,Negative3=0,Negative4=0;          //储存第一位数符号，储存第二位数符
+             -号，数码管显示符号，最后计算符号
+  14          //u16 Point_Location=9,Point=0;         //小数点
+  15          //u16 Point_Location1=9,Point_Location2=9,Point_Location3=9;            //储存第一位数点的位置，储存第
+             -二位数点的位置，储存最终点的位置
+  16          //u16 flag=0;           //功能符号标识
+  17          //u16 Calculate=0;              //运算符号标识
+  18          //u16 Num_Location=0;           //被计算数据位置
+  19          //int b[8]={0,0,0,0,0,0,0,0};           //数码管显示的数
+  20          //int a[2]={0,10};              //数码管显示的负号
+  21          //int c[2]={12,11};             //数码管显示的小数点
+  22          //int T=0;
+  23          //int x,y;
+  24          
+  25          //void Input()
+  26          //{
+  27          //      int KeyNum=MatrixKey();
+  28          //      int KeyNumber=Key();
+  29          //      
+  30          //              if(KeyNum==1||KeyNum==2||KeyNum==3||KeyNum==4||KeyNum==5||KeyNum==6||KeyNum==7||KeyNum==8||KeyNum==9||
+             -KeyNum==0)
+  31          //              {
+  32          //                      T=KeyNum;
+  33          //                      
+  34          //                      for(i=7;i>0;i--)
+  35          //                      {
+  36          //                              b[i]=b[i-1];
+  37          //                      }
+  38          //              
+  39          //                      b[0]=T;
+  40          //                      
+  41          //                      if(Point_Location==9)
+  42          //                      {
+  43          //                              Point_Location=9;
+  44          //                      }
+  45          //                      else
+  46          //                      {
+  47          //                              Point_Location--;
+  48          //                              
+  49          //                      }
+  50          //                      if(Num_Location==0)
+  51          //                      {
+C51 COMPILER V9.60.7.0   FB                                                                10/20/2023 10:47:11 PAGE 2   
+
+  52          //                              Num1=(b[6]*1000000+b[5]*100000+b[4]*10000+b[3]*1000+b[2]*100+b[1]*10+b[0]);
+  53          //                      }
+  54          //                      else
+  55          //                      {
+  56          //                              Num2=(b[6]*1000000+b[5]*100000+b[4]*10000+b[3]*1000+b[2]*100+b[1]*10+b[0]);
+  57          //                      }
+  58          //                      
+  59          //              }
+  60          //              else if(KeyNum==10)     //加
+  61          //              {
+  62          //                      
+  63          //                      Negative4=1;
+  64          //                      T=KeyNum;
+  65          //                      Negative3=0;
+  66          //                      Num_Location=1;
+  67          //                      Calculate=1;
+  68          //                      Point_Location1=Point_Location;
+  69          //                      Point_Location=9;
+  70          //                      Point=0;
+  71          //                      for(i=0;i<7;i++)
+  72          //                      {
+  73          //                              b[i]=0;
+  74          //                      }
+  75          //                      
+  76          //              }
+  77          //              else if(KeyNum==11)     //减
+  78          //              {
+  79          //                      
+  80          //                      T=KeyNum;
+  81          //                      if(Num1==0)
+  82          //                      {
+  83          //                              Negative1=1;            //标记第一位负号
+  84          //                              Negative3=1;            //显示第一位负号
+  85          //                      }
+  86          //                      else if(Num2==0)
+  87          //                      {
+  88          //                              if(Negative4==1)
+  89          //                              {
+  90          //                                      Negative2=1;            //标记第二位负号
+  91          //                                      Negative3=1;            //显示第二位负号
+  92          //                              }
+  93          //                              else
+  94          //                              {
+  95          //                                      Num_Location=1;
+  96          //                                      Calculate=2;
+  97          //                                      Point_Location1=Point_Location;
+  98          //                                      Point_Location=9;
+  99          //                                      Point=0;
+ 100          //                                      for(i=0;i<7;i++)
+ 101          //                                      {
+ 102          //                                              b[i]=0;
+ 103          //                                      }
+ 104          //                                      flag=100;
+ 105          //                              }
+ 106          //                      }
+ 107          //                      
+ 108          //              }
+ 109          //              else if(KeyNum==12)     //乘
+ 110          //              {
+ 111          //                      
+ 112          //                      Negative4=1;
+ 113          //                      T=KeyNum;
+C51 COMPILER V9.60.7.0   FB                                                                10/20/2023 10:47:11 PAGE 3   
+
+ 114          //                      Num_Location=1;
+ 115          //                      Calculate=3;
+ 116          //                      Point_Location1=Point_Location;
+ 117          //                      Point_Location=9;
+ 118          //                      Point=0;
+ 119          //                      for(i=0;i<7;i++)
+ 120          //                      {
+ 121          //                              b[i]=0;
+ 122          //                      }
+ 123          //                      flag=100;
+ 124          //              }
+ 125          //              else if(KeyNum==13)     //除
+ 126          //              {
+ 127          //                      
+ 128          //                      Negative4=1;
+ 129          //                      T=KeyNum;
+ 130          //                      Num_Location=1;
+ 131          //                      Calculate=4;
+ 132          //                      Point_Location1=Point_Location;
+ 133          //                      Point_Location=9;
+ 134          //                      Point=0;
+ 135          //                      for(i=0;i<7;i++)
+ 136          //                      {
+ 137          //                              b[i]=0;
+ 138          //                      }
+ 139          //                      flag=100;
+ 140          //              }
+ 141          //              else if(KeyNum==16)     //等于
+ 142          //              {
+ 143          //                      flag=6;
+ 144          //                      T=KeyNum;
+ 145          //              }
+ 146          //              else if(KeyNum==15)     //小数点
+ 147          //              {
+ 148          //                      flag=7;
+ 149          //                      Point_Location=8;
+ 150          //                      T=KeyNum;
+ 151          //                      Point=1;
+ 152          //              }
+ 153          //              else if(KeyNumber==1)
+ 154          //              {
+ 155          //                      flag=8;
+ 156          //              }
+ 157          //}
+ 158          
+ 159          //void main()
+ 160          //{
+ 161          //      
+ 162          //      while(1)
+ 163          //      {
+ 164          //              Input();
+ 165          //      
+ 166          //              Nixie(1,a[Negative3]);
+ 167          //              Nixie(2,b[6]);
+ 168          //              Nixie(3,b[5]);
+ 169          //              Nixie(4,b[4]);
+ 170          //              Nixie(5,b[3]);
+ 171          //              Nixie(6,b[2]);
+ 172          //              Nixie(7,b[1]);
+ 173          //              Nixie(8,b[0]);
+ 174          //              c[0]=12;
+ 175          //              Nixie(Point_Location,c[Point]);
+C51 COMPILER V9.60.7.0   FB                                                                10/20/2023 10:47:11 PAGE 4   
+
+ 176          //                      
+ 177          //              if(flag==6)             //等于
+ 178          //              {
+ 179          //                      Negative3=0;
+ 180          //                      Point_Location2=Point_Location;
+ 181          //                      Point_Location=9;
+ 182          //                      
+ 183          //                      if(Calculate==1)                //加法
+ 184          //                      {
+ 185          //                              if(Point_Location1<Point_Location2)
+ 186          //                              {
+ 187          //                                      Point_Location=Point_Location1;
+ 188          //                                      Point=1;
+ 189          //                                      if(Point_Location2!=9)
+ 190          //                                      {
+ 191          //                                              Point_Location3=(Point_Location2-Point_Location1);
+ 192          //                                              for(i=0;i<Point_Location3;i++)
+ 193          //                                              {
+ 194          //                                                      Num2=Num2*10;
+ 195          //                                              }
+ 196          //                                      }
+ 197          //                                      else if(Point_Location2==9)
+ 198          //                                      {
+ 199          //                                              Point_Location3=(8-Point_Location1);
+ 200          //                                              for(i=0;i<Point_Location3;i++)
+ 201          //                                              {
+ 202          //                                                      Num2=Num2*10;
+ 203          //                                              }
+ 204          //                                      }
+ 205          //                                      
+ 206          //                              }
+ 207          //                              else if(Point_Location1==Point_Location2)
+ 208          //                              {
+ 209          //                                      Point_Location=Point_Location2;
+ 210          //                                      Point_Location3=Point_Location1;
+ 211          //                              }
+ 212          //                              else if(Point_Location1>Point_Location2)
+ 213          //                              {
+ 214          //                                      if(Point_Location1!=9)
+ 215          //                                      {
+ 216          //                                              Point_Location=Point_Location2;
+ 217          
+ 218          //                                              Point_Location3=(Point_Location1-Point_Location2);
+ 219          //                                              for(i=0;i<Point_Location3;i++)
+ 220          //                                              {
+ 221          //                                                      Num1=Num1*10;
+ 222          //                                              }
+ 223          //                                      }
+ 224          //                                      else if(Point_Location1==9)
+ 225          //                                      {
+ 226          //                                              Point_Location=Point_Location2;
+ 227          //                                              Point_Location3=(8-Point_Location2);
+ 228          //                                              for(i=0;i<Point_Location3;i++)
+ 229          //                                              {
+ 230          //                                                      Num1=Num1*10;
+ 231          //                                              }
+ 232          //                                      }
+ 233          //                                      
+ 234          //                              }
+ 235          //                      
+ 236          //                              if(Negative1==1&&Negative2==1)
+ 237          //                              {
+C51 COMPILER V9.60.7.0   FB                                                                10/20/2023 10:47:11 PAGE 5   
+
+ 238          //                                      Negative3=1;
+ 239          //                                      Num3=Num1+Num2;
+ 240          //                              }
+ 241          //                              else if(Negative1==1&&Negative2==0)
+ 242          //                              {
+ 243          //                                      if(Num1>=Num2)
+ 244          //                                      {
+ 245          //                                              Num3=(Num1-Num2);
+ 246          //                                              Negative3=1;
+ 247          //                                      }
+ 248          //                                      else if(Num1<=Num2)
+ 249          //                                      {
+ 250          //                                              Num3=(Num2-Num1);
+ 251          //                                              Negative3=0;
+ 252          //                                      }
+ 253          //                              }
+ 254          //                              else if(Negative1==0&&Negative2==1)
+ 255          //                              {
+ 256          //                                      if(Num1>=Num2)
+ 257          //                                      {
+ 258          //                                              Num3=(Num1-Num2);
+ 259          //                                              Negative3=0;
+ 260          //                                      }
+ 261          //                                      else if(Num1<=Num2)
+ 262          //                                      {
+ 263          //                                              Num3=(Num2-Num1);
+ 264          //                                              Negative3=1;
+ 265          //                                      }
+ 266          //                              }
+ 267          //                              else if(Negative1==0&&Negative2==0)
+ 268          //                              {
+ 269          //                                      Num3=Num1+Num2;
+ 270          //                              }
+ 271          //                              
+ 272          //                              b[6]=((Num3/1000000)%10);
+ 273          //                              b[5]=((Num3/100000)%10);
+ 274          //                              b[4]=((Num3/10000)%10);
+ 275          //                              b[3]=((Num3/1000)%10);
+ 276          //                              b[2]=((Num3/100)%10);
+ 277          //                              b[1]=((Num3/10)%10);
+ 278          //                              b[0]=(Num3%10);
+ 279          //                      }
+ 280          //                      
+ 281          //                      if(Calculate==2)                //减法
+ 282          //                      {
+ 283          //                              if(Point_Location1<Point_Location2)
+ 284          //                              {
+ 285          //                                      Point_Location=Point_Location1;
+ 286          //                                      Point=1;
+ 287          //                                      if(Point_Location2!=9)
+ 288          //                                      {
+ 289          //                                              Point_Location3=(Point_Location2-Point_Location1);
+ 290          //                                              for(i=0;i<Point_Location3;i++)
+ 291          //                                              {
+ 292          //                                                      Num2=Num2*10;
+ 293          //                                              }
+ 294          //                                      }
+ 295          //                                      else if(Point_Location2==9)
+ 296          //                                      {
+ 297          //                                              Point_Location3=(8-Point_Location1);
+ 298          //                                              for(i=0;i<Point_Location3;i++)
+ 299          //                                              {
+C51 COMPILER V9.60.7.0   FB                                                                10/20/2023 10:47:11 PAGE 6   
+
+ 300          //                                                      Num2=Num2*10;
+ 301          //                                              }
+ 302          //                                      }
+ 303          //                              }
+ 304          //                              else if(Point_Location1==Point_Location2)
+ 305          //                              {
+ 306          //                                      Point_Location=Point_Location2;
+ 307          //                                      Point_Location3=Point_Location1;
+ 308          //                              }
+ 309          //                              else if(Point_Location1>Point_Location2)
+ 310          //                              {
+ 311          //                                      Point_Location=Point_Location2;
+ 312          //                                      Point_Location3=(Point_Location1-Point_Location2);
+ 313          //                                      for(i=0;i<Point_Location3;i++)
+ 314          //                                      {
+ 315          //                                              Num1=Num1*10;
+ 316          //                                      }
+ 317          //                              }
+ 318          //                              
+ 319          //                              if(Negative1==1&&Negative2==1)
+ 320          //                              {
+ 321          //                                      if(Num1>=Num2)
+ 322          //                                      {
+ 323          //                                              Num3=(Num1-Num2);
+ 324          //                                              Negative3=1;
+ 325          //                                      }
+ 326          //                                      else if(Num1<=Num2)
+ 327          //                                      {
+ 328          //                                              Num3=(Num2-Num1);
+ 329          //                                              Negative3=0;
+ 330          //                                      }
+ 331          //                                              
+ 332          //                              }
+ 333          //                              else if(Negative1==1&&Negative2==0)
+ 334          //                              {
+ 335          //                                      Num3=Num1+Num2;
+ 336          //                                      Negative3=1;
+ 337          //                                      
+ 338          //                              }
+ 339          //                              else if(Negative1==0&&Negative2==1)
+ 340          //                              {
+ 341          //                                      Num3=Num1+Num2;
+ 342          //                                      Negative3=0;
+ 343          //                              }
+ 344          //                              else if(Negative1==0&&Negative2==0)
+ 345          //                              {
+ 346          //                                      if(Num1>=Num2)
+ 347          //                                      {
+ 348          //                                              Num3=(Num1-Num2);
+ 349          //                                              Negative3=0;
+ 350          //                                      }
+ 351          //                                      else if(Num1<=Num2)
+ 352          //                                      {
+ 353          //                                              Num3=(Num2-Num1);
+ 354          //                                              Negative3=1;
+ 355          //                                      }
+ 356          //                              }
+ 357          //                      
+ 358          //                              b[6]=((Num3/1000000)%10);
+ 359          //                              b[5]=((Num3/100000)%10);
+ 360          //                              b[4]=((Num3/10000)%10);
+ 361          //                              b[3]=((Num3/1000)%10);
+C51 COMPILER V9.60.7.0   FB                                                                10/20/2023 10:47:11 PAGE 7   
+
+ 362          //                              b[2]=((Num3/100)%10);
+ 363          //                              b[1]=((Num3/10)%10);
+ 364          //                              b[0]=(Num3%10);
+ 365          //                      }
+ 366          //              
+ 367          //                      if(Calculate==3)                //乘法
+ 368          //                      {
+ 369          //                              Point=1;
+ 370          //                              if(Point_Location1!=9&&Point_Location2!=9)
+ 371          //                              {
+ 372          //                                      Point_Location=(Point_Location1+Point_Location2-8);
+ 373          //                              }
+ 374          //                              else if(Point_Location1==9&&Point_Location2!=9)
+ 375          //                              {
+ 376          //                                      Point_Location=Point_Location2;
+ 377          //                              }
+ 378          //                              else if(Point_Location1!=9&&Point_Location2==9)
+ 379          //                              {
+ 380          //                                      Point_Location=Point_Location1;
+ 381          //                              }
+ 382          //                              else Point=0;
+ 383          //                              
+ 384          //                              if(Negative1==1&&Negative2==1)
+ 385          //                              {
+ 386          //                                      
+ 387          //                                      Num3=Num1*Num2;
+ 388          //                                      Negative3=0;
+ 389          //                                      
+ 390          //                              }
+ 391          //                              else if(Negative1==1&&Negative2==0)
+ 392          //                              {
+ 393          //                                      Num3=Num1*Num2;
+ 394          //                                      Negative3=1;
+ 395          //                                      
+ 396          //                              }
+ 397          //                              else if(Negative1==0&&Negative2==1)
+ 398          //                              {
+ 399          //                                      Num3=Num1*Num2;
+ 400          //                                      Negative3=1;
+ 401          //                              }
+ 402          //                              else if(Negative1==0&&Negative2==0)
+ 403          //                              {
+ 404          //                                      Num3=Num1*Num2;
+ 405          //                              }
+ 406          //                      
+ 407          //                              b[6]=((Num3/1000000)%10);
+ 408          //                              b[5]=((Num3/100000)%10);
+ 409          //                              b[4]=((Num3/10000)%10);
+ 410          //                              b[3]=((Num3/1000)%10);
+ 411          //                              b[2]=((Num3/100)%10);
+ 412          //                              b[1]=((Num3/10)%10);
+ 413          //                              b[0]=(Num3%10);
+ 414          //                      }
+ 415          //                      
+ 416          //                      if(Calculate==4)                //除法
+ 417          //                      {
+ 418          //                              if(Point_Location1>Point_Location2)
+ 419          //                              {
+ 420          //                                      Point_Location=9;
+ 421          //                                      Point=0;
+ 422          //                                      if(Point_Location1!=9)
+ 423          //                                      {
+C51 COMPILER V9.60.7.0   FB                                                                10/20/2023 10:47:11 PAGE 8   
+
+ 424          //                                              Point_Location3=Point_Location1-Point_Location2;
+ 425          //                                              for(i=0;i<Point_Location3-1;i++)
+ 426          //                                              {
+ 427          //                                                      Num1=Num1*10;
+ 428          //                                              }
+ 429          //                                      }
+ 430          //                                      else if(Point_Location1==9)
+ 431          //                                      {
+ 432          //                                              Point_Location3=(8-Point_Location2);
+ 433          //                                              for(i=0;i<Point_Location3;i++)
+ 434          //                                              {
+ 435          //                                                      Num1=Num1*10;
+ 436          //                                              }
+ 437          //                                      }
+ 438          //                              }
+ 439          //                              else if(Point_Location1==Point_Location2)
+ 440          //                              {
+ 441          //                                      Point_Location=9;
+ 442          //                                      Point=0;
+ 443          //                              }
+ 444          //                              else if(Point_Location1<Point_Location2)
+ 445          //                              {
+ 446          //                                      if(Point_Location2!=9)
+ 447          //                                      {
+ 448          //                                              Point_Location3=8-Point_Location2;
+ 449          //                                              Point_Location=Point_Location1+Point_Location3;
+ 450          //                                              Point=1;
+ 451          //                                      }
+ 452          //                                      else if(Point_Location2==9)
+ 453          //                                      {
+ 454          //                                              Point_Location=Point_Location1;
+ 455          //                                              Point=1;
+ 456          //                                      }
+ 457          //                              }
+ 458          //                              
+ 459          //                              Num1=Num1*100;
+ 460          //                              
+ 461          //                              if(Negative1==1&&Negative2==1)
+ 462          //                              {
+ 463          //                                      Num3=Num1/Num2;
+ 464          //                                      Negative3=0;
+ 465          //                              }
+ 466          //                              else if(Negative1==1&&Negative2==0)
+ 467          //                              {
+ 468          //                                      Num3=Num1/Num2;
+ 469          //                                      Negative3=1;
+ 470          //                              }
+ 471          //                              else if(Negative1==0&&Negative2==1)
+ 472          //                              {
+ 473          //                                      Num3=Num1/Num2;
+ 474          //                                      Negative3=1;
+ 475          //                              }
+ 476          //                              else if(Negative1==0&&Negative2==0)
+ 477          //                              {
+ 478          //                                      Num3=Num1/Num2;
+ 479          //                              }
+ 480          //                              
+ 481          //                              x=(Num3%10);            //检测后两位是否为0
+ 482          //                              y=(Num3%100);
+ 483          //                              if(x==0&&y==0)
+ 484          //                              {
+ 485          //                                      Point_Location=Point_Location;
+C51 COMPILER V9.60.7.0   FB                                                                10/20/2023 10:47:11 PAGE 9   
+
+ 486          //                                      Num3/=100;
+ 487          //                              }
+ 488          //                              else
+ 489          //                              {
+ 490          //                                      Point=1;
+ 491          //                                      if(Point_Location!=9)
+ 492          //                                      {
+ 493          //                                              Point_Location-=2;
+ 494          //                                      }
+ 495          //                                      else if(Point_Location==9)
+ 496          //                                      {
+ 497          //                                              Point_Location=6;
+ 498          //                                      }
+ 499          //                                      
+ 500          //                              }
+ 501          //                      
+ 502          //                              b[6]=((Num3/1000000)%10);
+ 503          //                              b[5]=((Num3/100000)%10);
+ 504          //                              b[4]=((Num3/10000)%10);
+ 505          //                              b[3]=((Num3/1000)%10);
+ 506          //                              b[2]=((Num3/100)%10);
+ 507          //                              b[1]=((Num3/10)%10);
+ 508          //                              b[0]=(Num3%10);
+ 509          //                      }
+ 510          //                      flag=100;
+ 511          //              }
+ 512          //              
+ 513          //              if(flag==8)             //初始化
+ 514          //              {
+ 515          //                      Num_Location=0;
+ 516          //                      Num1=0;
+ 517          //                      Num2=0;
+ 518          //                      Num3=0;
+ 519          //                      Negative1=0;
+ 520          //                      Negative2=0;
+ 521          //                      Negative3=0;
+ 522          //                      Negative4=0;
+ 523          //                      Point_Location=9;
+ 524          //                      Point_Location1=9;
+ 525          //                      Point_Location2=9;
+ 526          //                      Point_Location3=9;
+ 527          //                      Point=0;
+ 528          //                      Calculate=0;
+ 529          //                      T=0;
+ 530          //                      for(i=0;i<7;i++)
+ 531          //                      {
+ 532          //                              b[i]=0;
+ 533          //                      }
+ 534          //                      flag=0;
+ 535          //              }
+ 536          //      }
+ 537          //}
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+C51 COMPILER V9.60.7.0   FB                                                                10/20/2023 10:47:11 PAGE 10  
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
